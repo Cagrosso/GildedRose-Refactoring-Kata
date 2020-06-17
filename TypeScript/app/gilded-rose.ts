@@ -19,15 +19,16 @@ export class GildedRose {
         this.items = items;
     }
 
-    // handleSellInUpdate(item: Item) {
-    //     if (item.name != 'Sulfuras') {
-    //         item.sellIn - 1;
-    //     }
-    // }
+    decrementItemSellIn(item: Item): Item {
+        if (item.name != 'Sulfuras') {
+            item.sellIn -= 1;
+        }
+        return item;
+    }
 
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
-            const item = this.items[i];
+            let item = this.items[i];
             const itemName = this.items[i].name;
 
             switch (itemName) {
@@ -65,9 +66,9 @@ export class GildedRose {
                     }
                 }
             }
-            if (itemName != 'Sulfuras') {
-                item.sellIn = item.sellIn - 1;
-            }
+
+            item = this.decrementItemSellIn(item);
+
             if (item.sellIn < 0) {
                 if (itemName != 'Aged Brie') {
                     if (itemName != 'Backstage passes') {
