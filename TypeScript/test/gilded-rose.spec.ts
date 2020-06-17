@@ -109,6 +109,12 @@ describe('Gilded Rose', function () {
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(0);
     });
+
+    it('should decrease Conjured items by 2 times the normal rate', () => {
+        const gildedRose = new GildedRose([new Item('Conjured foo', 1, 5)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(3);
+    });
 });
 
 // All items have a SellIn value which denotes the number of days we have to sell the item

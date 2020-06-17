@@ -38,6 +38,16 @@ export class GildedRose {
         return item;
     }
 
+    adjustConjuredItemQualityByAmount(item: Item, amount: number): Item {
+        const isConjured = item.name.indexOf("Conjured") !== -1;
+
+        if (isConjured) {
+            return this.adjustItemQualityByAmount(item, amount * 2);
+        }
+
+        return this.adjustItemQualityByAmount(item, amount);
+    }
+
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
@@ -69,9 +79,9 @@ export class GildedRose {
                     break;
                 default:
                     if (item.sellIn > 0) {
-                        item = this.adjustItemQualityByAmount(item, -1);
+                        item = this.adjustConjuredItemQualityByAmount(item, -1);
                     } else {
-                        item = this.adjustItemQualityByAmount(item, -2);
+                        item = this.adjustConjuredItemQualityByAmount(item, -2);
                     }
                     
             }
