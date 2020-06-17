@@ -26,6 +26,18 @@ export class GildedRose {
         return item;
     }
 
+    adjustItemQualityByAmount(item: Item, amount: number): Item {
+        item.quality += amount;
+        if (item.quality > 50) {
+            item.quality = 50;
+        }
+        if (item.quality < 0) {
+            item.quality = 0;
+        }
+
+        return item;
+    }
+
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
             let item = this.items[i];
@@ -33,60 +45,38 @@ export class GildedRose {
 
             switch (itemName) {
                 case 'Aged Brie':
-                    // if (item.sellIn > 0) {
-                    //     item.quality += 1;
-                    // } else {
-                    //     item.quality += 2;
-                    // }
-                case 'Backstage Passes':
+                    if (item.sellIn > 0) {
+                        item = this.adjustItemQualityByAmount(item, 1);
+                    } else {
+                        item = this.adjustItemQualityByAmount(item, 2);
+                    }
+                    break;
+                case 'Backstage passes':
+                    if (item.sellIn > 10) {
+                        item = this.adjustItemQualityByAmount(item, 1);
+                    }
+                    if (item.sellIn <= 10 && item.sellIn > 5) {
+                        item = this.adjustItemQualityByAmount(item, 2);
+                    }
+                    if (item.sellIn <= 5) {
+                        item = this.adjustItemQualityByAmount(item, 3);
+                    }
+                    if (item.sellIn <= 0) {
+                        item.quality = 0;
+                    }
+                    break;
                 case 'Sulfuras':
+                    break;
                 default:
-            }
-
-            if (itemName != 'Aged Brie' && itemName != 'Backstage passes') {
-                if (item.quality > 0) {
-                    if (itemName != 'Sulfuras') {
-                        item.quality = item.quality - 1
+                    if (item.sellIn > 0) {
+                        item = this.adjustItemQualityByAmount(item, -1);
+                    } else {
+                        item = this.adjustItemQualityByAmount(item, -2);
                     }
-                }
-            } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1
-                    if (itemName == 'Backstage passes') {
-                        if (item.sellIn < 11) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1
-                            }
-                        }
-                        if (item.sellIn < 6) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1
-                            }
-                        }
-                    }
-                }
+                    
             }
 
             item = this.decrementItemSellIn(item);
-
-            if (item.sellIn < 0) {
-                if (itemName != 'Aged Brie') {
-                    if (itemName != 'Backstage passes') {
-                        if (item.quality > 0) {
-                            if (itemName != 'Sulfuras') {
-                                item.quality = item.quality - 1
-                            }
-                        }
-                    } else {
-                        item.quality = item.quality - item.quality
-                    }
-                } else {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1
-                    }
-                }
-            }
-
             this.items[i] = item;
         }
 
