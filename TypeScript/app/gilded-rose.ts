@@ -1,3 +1,5 @@
+import { isString } from "util";
+
 export class Item {
     name: string;
     sellIn: number;
@@ -17,10 +19,28 @@ export class GildedRose {
         this.items = items;
     }
 
+    // handleSellInUpdate(item: Item) {
+    //     if (item.name != 'Sulfuras') {
+    //         item.sellIn - 1;
+    //     }
+    // }
+
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i];
             const itemName = this.items[i].name;
+
+            switch (itemName) {
+                case 'Aged Brie':
+                    // if (item.sellIn > 0) {
+                    //     item.quality += 1;
+                    // } else {
+                    //     item.quality += 2;
+                    // }
+                case 'Backstage Passes':
+                case 'Sulfuras':
+                default:
+            }
 
             if (itemName != 'Aged Brie' && itemName != 'Backstage passes') {
                 if (item.quality > 0) {

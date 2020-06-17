@@ -46,25 +46,39 @@ describe('Gilded Rose', function () {
         expect(items[0].quality).to.equal(7);
     });
 
+    it('should not increase quality above 50 of Aged Brie by 2 as sellIn < 0 ', () => {
+        const gildedRose = new GildedRose([new Item('Aged Brie', -1, 49)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(50);
+    });
+
     it('should not increase quality of Aged Brie above 50', () => {
         const gildedRose = new GildedRose([new Item('Aged Brie', 5, 50)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(50);
     });
 
+
     it('should not degrade Sulfuras quality or sellIn', () => {
         const gildedRose = new GildedRose([new Item('Sulfuras', 0, 5)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(5);
+        expect(items[0].sellIn).to.equal(0);
     });
 
-    it('should increase Backstage passes quality by 1 when sellIn >10', () => {
+    it('should not degrade Sulfuras quality by 1 when sellIn < 0', () => {
+        const gildedRose = new GildedRose([new Item('Sulfuras', -1, 5)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(5);
+    })
+
+    it('should increase Backstage passes quality by 1 when sellIn > 10', () => {
         const gildedRose = new GildedRose([new Item('Backstage passes', 11, 5)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(6);
     });
 
-    it('should increase Backstage passes quality by 2 when sellIn <= 10 but > 5', () => {
+    it('should increase Backstage passes quality by 2 when sellIn <= 10 and > 5', () => {
         const gildedRose = new GildedRose([new Item('Backstage passes', 10, 5)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(7);
@@ -74,6 +88,20 @@ describe('Gilded Rose', function () {
         const gildedRose = new GildedRose([new Item('Backstage passes', 5, 5)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(8);
+    });
+
+    it('should not increase Backstage passes quality by anything when quality == 50', () => {
+        let gildedRose = new GildedRose([new Item('Backstage passes', 12, 49)]);
+        let items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(50);
+
+        gildedRose = new GildedRose([new Item('Backstage passes', 10, 49)]);
+        items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(50);
+
+        gildedRose = new GildedRose([new Item('Backstage passes', 5, 49)]);
+        items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(50);
     });
 
     it('should drop Backstage passes quality to 0 when sellIn is <= 0', () => {
